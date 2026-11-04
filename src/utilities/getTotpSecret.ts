@@ -1,9 +1,9 @@
-import type { Payload, TypedUser } from 'payload'
+import type { Payload, User } from 'payload'
 
 type Args = {
 	collection: string
 	payload: Payload
-	user: TypedUser
+	user: User
 }
 
 export async function getTotpSecret({

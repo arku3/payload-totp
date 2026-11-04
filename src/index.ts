@@ -88,13 +88,16 @@ function wrapPayloadCollections(payload: Payload, pluginOptions: PayloadTOTPConf
 
 	const operationsBySlug: Record<string, readonly string[]> = {
 		'payload-jobs': collectionOperations,
-		'payload-locked-documents': collectionOperations.filter((operation) => operation !== 'read'),
+		'payload-locked-documents': collectionOperations.filter(
+			(operation) => operation !== 'read',
+		),
 		'payload-query-presets': collectionOperations,
 	}
 
-	if (config.folders) {
-		operationsBySlug[config.folders.slug] = collectionOperations
-	}
+	// TODO: payload 4 folder is a collection
+	// if (config.folders) {
+	// 	operationsBySlug[config.folders.slug] = collectionOperations
+	// }
 
 	for (const collection of config.collections) {
 		const operations = operationsBySlug[collection.slug]

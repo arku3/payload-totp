@@ -32,7 +32,7 @@ export default function Setup({ backUrl, i18n, payload }: Args) {
 		<Button
 			buttonStyle="secondary"
 			el="link"
-			size="small"
+			// size="small"
 			url={url}
 		>
 			{i18n.t('totpPlugin:setup:button')}

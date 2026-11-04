@@ -1,6 +1,6 @@
 import type { ServerComponentProps } from 'payload'
 
-import { formatAdminURL } from '@payloadcms/ui/shared'
+import { formatAdminURL } from 'payload/shared'
 import { headers } from 'next/headers.js'
 import { redirect } from 'next/navigation.js'
 

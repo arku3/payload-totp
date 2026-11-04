@@ -1,8 +1,8 @@
 import type { I18nClient } from '@payloadcms/translations'
 import type { AdminViewProps, ServerComponentProps } from 'payload'
 
-import { MinimalTemplate } from '@payloadcms/next/templates'
-import { formatAdminURL } from '@payloadcms/ui/shared'
+import { MinimalTemplate } from '@payloadcms/ui/rsc'
+import { formatAdminURL } from 'payload/shared'
 import { redirect } from 'next/navigation.js'
 
 import type { CustomTranslationsKeys, CustomTranslationsObject } from '../../../i18n/types.js'

@@ -18,7 +18,7 @@ export default function RemoveButton({ children, modalSlug }: Args) {
 			onClick={() => {
 				openModal(modalSlug)
 			}}
-			size="small"
+			// size="small"
 		>
 			{children}
 		</Button>

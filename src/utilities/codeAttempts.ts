@@ -4,7 +4,7 @@ import type {
 	Payload,
 	PayloadRequest,
 	SanitizedCollectionConfig,
-	TypedUser,
+	User,
 } from 'payload'
 
 // Cast: `CollectionSlug` is narrowed to the slugs of whichever app generated types.
@@ -41,6 +41,8 @@ export const totpAttemptsCollection: CollectionConfig = {
 		{ name: 'attempts', type: 'number', defaultValue: 0, required: true },
 		{ name: 'lockUntil', type: 'date' },
 	],
+	authorship: false,
+	versions: false,
 	graphQL: false,
 	lockDocuments: false,
 	timestamps: false,
@@ -56,7 +58,7 @@ type Args = {
 	collection: SanitizedCollectionConfig
 	payload: Payload
 	req: PayloadRequest
-	user: TypedUser
+	user: User
 }
 
 const isLocked = (row: Attempts | null) =>
@@ -71,11 +73,7 @@ const findAttempts = (payload: Payload, userID: number | string) =>
 		where: { id: { equals: String(userID) } },
 	})
 
-const updateAttempts = (
-	payload: Payload,
-	userID: number | string,
-	data: Record<string, unknown>,
-) =>
+const updateAttempts = (payload: Payload, userID: number | string, data: Record<string, unknown>) =>
 	// The adapter types the row after the app's collections, which the plugin cannot know.
 	payload.db.updateOne({
 		id: String(userID),

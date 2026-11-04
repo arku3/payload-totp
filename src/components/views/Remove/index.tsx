@@ -1,7 +1,7 @@
 import type { I18nClient } from '@payloadcms/translations'
-import type { Payload, TypedUser } from 'payload'
+import type { Payload, User } from 'payload'
 
-import { MinimalTemplate } from '@payloadcms/next/templates'
+import { MinimalTemplate } from '@payloadcms/ui/rsc'
 
 import type { CustomTranslationsKeys, CustomTranslationsObject } from '../../../i18n/types.js'
 import type { PayloadTOTPConfig } from '../../../types.js'
@@ -13,7 +13,7 @@ type Args = {
 	i18n: I18nClient<CustomTranslationsObject, CustomTranslationsKeys>
 	payload: Payload
 	pluginOptions: PayloadTOTPConfig
-	user: TypedUser
+	user: User
 }
 
 export const Remove: React.FC<Args> = (args) => {
