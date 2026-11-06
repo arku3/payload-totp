@@ -71,6 +71,7 @@
 		"@payloadcms/db-mongodb": "^4.0.0-beta.7",
 		"@payloadcms/db-postgres": "^4.0.0-beta.7",
 		"@payloadcms/db-sqlite": "^4.0.0-beta.7",
+		"@payloadcms/next": "4.0.0-beta.7",
 		"@payloadcms/richtext-lexical": "^4.0.0-beta.7",
 		"@payloadcms/translations": "^4.0.0-beta.7",
 		"@payloadcms/ui": "^4.0.0-beta.7",

@@ -3,7 +3,7 @@
 'use client'
 
 import { useAuth } from '@payloadcms/ui'
-import { usePathname, useRouter } from 'next/navigation.js'
+import { usePathname, useRouter } from '@payloadcms/ui'
 import { useEffect } from 'react'
 
 import type { UserWithTotp } from '../../types.js'

@@ -1,5 +1,6 @@
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { nextServerAdapter } from '@payloadcms/next';
 import path from 'path'
 import { buildConfig } from 'payload'
 import { payloadTotp } from 'payload-totp'
@@ -49,6 +50,7 @@ export default buildConfig({
 			disableAccessWrapper: process.env.DISABLE_ACCESS_WRAPPER === '1',
 			forceWhiteBackgroundOnQrCode:
 				process.env.FORCE_WHITE_BACKGROUND_ON_QR_CODE === '1',
+			serverAdapter: 
 		}),
 	],
 	secret: process.env.PAYLOAD_SECRET || 'test-secret_key',

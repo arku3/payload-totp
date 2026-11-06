@@ -1,9 +1,9 @@
 import type { I18nClient } from '@payloadcms/translations'
-import type { AdminViewProps, ServerComponentProps } from 'payload'
+import type { AdminViewServerProps, ServerComponentProps } from 'payload'
 
 import { MinimalTemplate } from '@payloadcms/ui/rsc'
 import { formatAdminURL } from 'payload/shared'
-import { redirect } from 'next/navigation.js'
+// import { redirect } from '@payloadcms/ui'
 import { Secret, TOTP } from 'otpauth'
 
 import type { CustomTranslationsKeys, CustomTranslationsObject } from '../../../i18n/types.js'
@@ -16,7 +16,7 @@ import ShowSecret from './ShowSecret/index.js'
 
 type Args = {
 	pluginOptions: PayloadTOTPConfig
-} & AdminViewProps &
+} & AdminViewServerProps &
 	ServerComponentProps
 
 export const TOTPSetup: React.FC<Args> = (args) => {
@@ -46,7 +46,8 @@ export const TOTPSetup: React.FC<Args> = (args) => {
 			serverURL,
 		})
 
-		redirect(url)
+		// FIXME: Handle redirect in a framework-agnostic way
+		// redirect(url)
 	}
 
 	if (user.hasTotp) {
@@ -56,7 +57,8 @@ export const TOTPSetup: React.FC<Args> = (args) => {
 			serverURL,
 		})
 
-		redirect(url)
+		// FIXME: Handle redirect in a framework-agnostic way
+		// redirect(url)
 	}
 
 	const secret = new Secret({

@@ -1,9 +1,8 @@
 import type { I18nClient } from '@payloadcms/translations'
-import type { AdminViewProps, ServerComponentProps } from 'payload'
+import type { AdminViewServerProps, ServerComponentProps } from 'payload'
 
 import { MinimalTemplate } from '@payloadcms/ui/rsc'
 import { formatAdminURL } from 'payload/shared'
-import { redirect } from 'next/navigation.js'
 
 import type { CustomTranslationsKeys, CustomTranslationsObject } from '../../../i18n/types.js'
 import type { PayloadTOTPConfig, UserWithTotp } from '../../../types.js'
@@ -13,7 +12,7 @@ import styles from './index.module.css'
 
 type Args = {
 	pluginOptions: PayloadTOTPConfig
-} & AdminViewProps &
+} & AdminViewServerProps &
 	ServerComponentProps
 
 export const TOTPVerify: React.FC<Args> = (args) => {
@@ -43,7 +42,8 @@ export const TOTPVerify: React.FC<Args> = (args) => {
 			serverURL,
 		})
 
-		redirect(url)
+		// FIXME: Handle redirect in a framework-agnostic way
+		// redirect(url)
 	}
 
 	if (!user.hasTotp || (user.hasTotp && user._strategy === 'totp')) {
@@ -53,7 +53,8 @@ export const TOTPVerify: React.FC<Args> = (args) => {
 			serverURL,
 		})
 
-		redirect(url)
+		// FIXME: Handle redirect in a framework-agnostic way
+		// redirect(url)
 	}
 
 	return (

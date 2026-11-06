@@ -1,7 +1,7 @@
 import type { ServerComponentProps } from 'payload'
 
 import { formatAdminURL } from 'payload/shared'
-import { redirect } from 'next/navigation.js'
+// import { redirect } from '@payloadcms/ui'
 
 import type { PayloadTOTPConfig, UserWithTotp } from '../../types.js'
 
@@ -38,7 +38,8 @@ export const TOTPProvider = async (args: Args) => {
 		!['api-key', 'totp'].includes(user._strategy ?? '') &&
 		normalizedPathname !== normalizedVerifyUrl
 	) {
-		redirect(`${payload.config.serverURL}${verifyUrl}?back=${encodeURIComponent(pathname)}`)
+		// FIXME: Handle redirect in a framework-agnostic way
+		// redirect(`${payload.config.serverURL}${verifyUrl}?back=${encodeURIComponent(pathname)}`)
 	} else if (
 		user &&
 		!user.hasTotp &&
@@ -46,7 +47,8 @@ export const TOTPProvider = async (args: Args) => {
 		normalizedPathname !== normalizedSetupUrl &&
 		user._strategy !== 'api-key'
 	) {
-		redirect(`${payload.config.serverURL}${setupUrl}?back=${encodeURIComponent(pathname)}`)
+		// FIXME: Handle redirect in a framework-agnostic way
+		// redirect(`${payload.config.serverURL}${setupUrl}?back=${encodeURIComponent(pathname)}`)
 	} else {
 		return (
 			<TOTPProviderClient
