@@ -8,6 +8,7 @@ export const users: CollectionConfig = {
 	admin: {
 		defaultColumns: ['email', 'updatedAt'],
 	},
+	authorship: false,
 	auth: {
 		useAPIKey: true,
 		tokenExpiration: Number.isFinite(tokenExpiration) ? tokenExpiration : undefined,

@@ -1,17 +1,17 @@
-import jwt from 'jsonwebtoken'
-import { cookies } from 'next/headers.js'
-import { getCookieExpiration, type IncomingAuthType } from 'payload'
+import type { CookieOptions, IncomingAuthType, PayloadRequest, ServerAdapter } from 'payload'
 
-import type { AuthenticatedUser, TotpTokenPayload } from './types.js'
+import type { AuthenticatedUser } from './types.js'
 
-import { TOTP_STRATEGY_NAME } from './constants.js'
+import { generateTotpCookie } from './utilities/cookie.js'
 
 type Args = {
 	authConfig: Omit<IncomingAuthType, 'cookies'> & Required<Pick<IncomingAuthType, 'cookies'>>
 	cookiePrefix: string
 	originalStrategy?: string
+	req: Pick<PayloadRequest, 'responseHeaders'>
 	secret: string
 	user: AuthenticatedUser
+	serverAdapter: ServerAdapter
 }
 
 export async function setCookie({
@@ -20,44 +20,26 @@ export async function setCookie({
 	originalStrategy,
 	secret,
 	user,
+	serverAdapter,
 }: Args) {
-	const originalStrategyName = originalStrategy ?? user._strategy
-
-	// Both cases would produce a cookie that cannot authenticate anyone: the TOTP
-	// strategy would either delegate to itself without a termination condition, or
-	// find no strategy at all. Leave the cookie alone and let the user verify again.
-	if (!originalStrategyName || originalStrategyName === TOTP_STRATEGY_NAME) {
+	const cookie = generateTotpCookie({
+		authConfig,
+		cookiePrefix,
+		originalStrategy,
+		secret,
+		user,
+		returnCookieAsObject: true,
+	})
+	if (!cookie) {
 		return
 	}
-
-	const token = jwt.sign(
-		{
-			originalStrategy: originalStrategyName,
-			userId: user.id,
-		} satisfies TotpTokenPayload,
-		secret,
-		{
-			expiresIn: authConfig.tokenExpiration || 7200,
-		},
-	)
-
-	const sameSite =
-		typeof authConfig.cookies.sameSite === 'string'
-			? (authConfig.cookies.sameSite.toLocaleLowerCase() as 'lax' | 'none' | 'strict')
-			: authConfig.cookies.sameSite
-				? 'strict'
-				: undefined
-
-	const cookieStore = await cookies()
-
-	cookieStore.set(`${cookiePrefix}-totp`, token, {
-		domain: authConfig.cookies.domain ?? undefined,
-		expires: getCookieExpiration({
-			seconds: authConfig.tokenExpiration || 7200,
-		}),
-		httpOnly: true,
-		path: '/',
-		sameSite,
-		secure: authConfig.cookies.secure,
+	await serverAdapter.setCookie(cookie.name, cookie.value ?? '', {
+		domain: cookie.domain,
+		expires: cookie.expires ? new Date(cookie.expires) : undefined,
+		httpOnly: cookie.httpOnly,
+		maxAge: cookie.maxAge,
+		path: cookie.path,
+		sameSite: cookie.sameSite?.toLowerCase() as CookieOptions['sameSite'],
+		secure: cookie.secure,
 	})
 }

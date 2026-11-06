@@ -1,5 +1,5 @@
 import type { TOTP } from 'otpauth'
-import type { AuthStrategyResult, CollectionSlug } from 'payload'
+import type { AuthStrategyResult, CollectionSlug, ServerAdapter } from 'payload'
 
 export type PayloadTOTPConfig = {
 	collection: CollectionSlug
@@ -8,6 +8,7 @@ export type PayloadTOTPConfig = {
 	forceSetup?: boolean
 	forceWhiteBackgroundOnQrCode?: boolean
 	totp?: Partial<Pick<TOTP, 'algorithm' | 'digits' | 'issuer' | 'period'>>
+	serverAdapter: ServerAdapter
 }
 
 /**

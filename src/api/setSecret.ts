@@ -6,7 +6,7 @@ import { Secret, TOTP } from 'otpauth'
 import type { CustomTranslationsKeys, CustomTranslationsObject } from '../i18n/types.js'
 import type { PayloadTOTPConfig, UserWithTotp } from '../types.js'
 
-import { setCookie } from '../setCookie.js'
+import { generateTotpCookie } from '../utilities/cookie.js'
 import { resolveOriginalStrategy } from '../utilities/resolveOriginalStrategy.js'
 
 export function setSecret(pluginOptions: PayloadTOTPConfig) {
@@ -76,15 +76,19 @@ export function setSecret(pluginOptions: PayloadTOTPConfig) {
 
 		const collection = payload.collections[pluginOptions.collection]
 
-		await setCookie({
+		const totpCookie = generateTotpCookie({
 			authConfig: collection.config.auth,
 			cookiePrefix: payload.config.cookiePrefix,
-			originalStrategy: await resolveOriginalStrategy({ payload, user }),
+			originalStrategy: await resolveOriginalStrategy({ payload, req, user }),
 			secret: payload.secret,
 			user,
+			returnCookieAsObject: false,
 		})
+		if (!totpCookie) {
+			return Response.json({ message: i18n.t('error:unspecific'), ok: false })
+		}
 
-		return Response.json({ ok: true })
+		return Response.json({ ok: true }, { headers: new Headers({ 'Set-Cookie': totpCookie }) })
 	}
 
 	return handler

@@ -1,11 +1,11 @@
-import type {
-	Access,
-	CheckboxField,
-	CollectionConfig,
-	Config,
-	Payload,
-	TextField,
-	UIField,
+import {
+	definePlugin,
+	type Access,
+	type CheckboxField,
+	type CollectionConfig,
+	type Payload,
+	type TextField,
+	type UIField,
 } from 'payload'
 
 import type { PayloadTOTPConfig } from './types.js'
@@ -18,7 +18,7 @@ import { refreshTotpCookieAfterRefresh } from './hooks/refreshTotpCookieAfterRef
 import { resetCodeAttemptsAfterUnlock } from './hooks/resetCodeAttemptsAfterUnlock.js'
 import { setHasTotp } from './hooks/setHasTotp.js'
 import { i18n } from './i18n/index.js'
-import { strategy } from './strategy.js'
+import { buildStrategy } from './strategy.js'
 import { totpAccess, type TotpAccessOptions } from './totpAccess.js'
 import { totpAttemptsCollection } from './utilities/codeAttempts.js'
 
@@ -114,13 +114,13 @@ function wrapPayloadCollections(payload: Payload, pluginOptions: PayloadTOTPConf
 	}
 }
 
-const payloadTotp =
-	(pluginOptions: PayloadTOTPConfig) =>
-	(config: Config): Config => {
+const payloadTotp = definePlugin<PayloadTOTPConfig>({
+	slug: 'payload-totp',
+	plugin: ({ config, options: pluginOptions }) => {
 		// Holds the secret of an enrolled user. It stays on the collection even when
 		// the plugin is disabled, so that toggling the option doesn't drop the column
 		// and force everyone who had set TOTP up to enroll again.
-		const totpSecretField = {
+		const totpSecretField: TextField = {
 			name: 'totpSecret',
 			type: 'text',
 			access: {
@@ -129,15 +129,15 @@ const payloadTotp =
 				update: () => false,
 			},
 			admin: {
-				disableBulkEdit: true,
-				disableListColumn: true,
-				disableListFilter: true,
-				hidden: true,
+				disabled: {
+					field: true,
+					bulkEdit: true,
+					column: true,
+					filter: true,
+					groupBy: true,
+				},
 			},
-			disableBulkEdit: true,
-			disableListColumn: true,
-			disableListFilter: true,
-		} as TextField
+		}
 
 		// A `totpAccess` applied by hand, as documented in the README, reads the
 		// options back from here, so they stay on the config even while disabled.
@@ -168,6 +168,7 @@ const payloadTotp =
 			}
 		}
 
+		const strategy = buildStrategy(pluginOptions)
 		return {
 			...config,
 			admin: {
@@ -355,7 +356,8 @@ const payloadTotp =
 				await config.onInit?.(payload)
 			},
 		}
-	}
+	},
+})
 
 export { payloadTotp, totpAccess }
 export type { TotpAccessOptions }

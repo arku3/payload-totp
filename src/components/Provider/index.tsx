@@ -1,7 +1,6 @@
 import type { ServerComponentProps } from 'payload'
 
 import { formatAdminURL } from 'payload/shared'
-import { headers } from 'next/headers.js'
 import { redirect } from 'next/navigation.js'
 
 import type { PayloadTOTPConfig, UserWithTotp } from '../../types.js'
@@ -17,7 +16,7 @@ type Args = {
 export const TOTPProvider = async (args: Args) => {
 	const { children, payload, pluginOptions, user: _user } = args
 	const user = _user as UserWithTotp
-	const headersList = await headers()
+	const headersList = await pluginOptions.serverAdapter.getHeaders()
 	const pathname = headersList.get('x-pathname') || '/'
 
 	const verifyUrl = formatAdminURL({

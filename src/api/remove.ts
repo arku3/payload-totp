@@ -8,7 +8,7 @@ import type { PayloadTOTPConfig, UserWithTotp } from '../types.js'
 
 import { countCodeAttempt } from '../utilities/codeAttempts.js'
 import { getTotpSecret } from '../utilities/getTotpSecret.js'
-import { removeCookie } from '../utilities/removeCookie.js'
+import { generateExpiredTotpCookie } from '../utilities/cookie.js'
 
 export function removeEndpointHandler(pluginOptions: PayloadTOTPConfig) {
 	const handler: PayloadHandler = async (req) => {
@@ -88,9 +88,13 @@ export function removeEndpointHandler(pluginOptions: PayloadTOTPConfig) {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} as any) // TODO: Report this to Payload
 
-		await removeCookie(payload.config.cookiePrefix)
+		const totpCookie = generateExpiredTotpCookie({
+			authConfig: collection.config.auth,
+			cookiePrefix: payload.config.cookiePrefix,
+			returnCookieAsObject: false,
+		})
 
-		return Response.json({ ok: true })
+		return Response.json({ ok: true }, { headers: new Headers({ 'Set-Cookie': totpCookie }) })
 	}
 
 	return handler

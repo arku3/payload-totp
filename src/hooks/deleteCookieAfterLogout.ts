@@ -1,8 +1,18 @@
 import type { CollectionAfterLogoutHook } from 'payload'
+import { getTotpConfig } from '../utilities/getTotpConfig.js'
+import { removeCookie } from '../utilities/removeCookie.js'
 
-import { cookies } from 'next/headers.js'
-
-export const deleteCookieAfterLogout: CollectionAfterLogoutHook = async ({ req: { payload } }) => {
-	const cookiesList = await cookies()
-	cookiesList.delete(`${payload.config.cookiePrefix}-totp`)
+export const deleteCookieAfterLogout: CollectionAfterLogoutHook = async ({
+	collection,
+	req: { payload },
+}) => {
+	const totpConfig = getTotpConfig(payload)
+	if (!totpConfig) {
+		return
+	}
+	await removeCookie({
+		authConfig: collection.auth,
+		cookiePrefix: payload.config.cookiePrefix,
+		serverAdapter: totpConfig.serverAdapter,
+	})
 }

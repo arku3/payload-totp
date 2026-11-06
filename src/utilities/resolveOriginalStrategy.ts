@@ -1,4 +1,4 @@
-import type { Payload } from 'payload'
+import type { Payload, PayloadRequest } from 'payload'
 
 import type { AuthenticatedUser } from '../types.js'
 
@@ -7,6 +7,7 @@ import { readTotpCookie } from './readTotpCookie.js'
 
 type Args = {
 	payload: Payload
+	req: Pick<PayloadRequest, 'headers'>
 	user: AuthenticatedUser
 }
 
@@ -19,6 +20,7 @@ type Args = {
  */
 export async function resolveOriginalStrategy({
 	payload,
+	req,
 	user,
 }: Args): Promise<string | undefined> {
 	const strategyName = user?._strategy
@@ -27,5 +29,5 @@ export async function resolveOriginalStrategy({
 		return strategyName
 	}
 
-	return (await readTotpCookie({ payload, user }))?.originalStrategy
+	return (await readTotpCookie({ payload, req, user }))?.originalStrategy
 }

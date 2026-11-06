@@ -1,7 +1,7 @@
-import type { Payload } from 'payload'
+import type { Payload, PayloadRequest } from 'payload'
 
 import jwt from 'jsonwebtoken'
-import { cookies } from 'next/headers.js'
+import { parseCookies } from 'payload/shared'
 
 import type { AuthenticatedUser, TotpTokenPayload } from '../types.js'
 
@@ -9,6 +9,7 @@ import { TOTP_STRATEGY_NAME } from '../constants.js'
 
 type Args = {
 	payload: Payload
+	req: Pick<PayloadRequest, 'headers'>
 	user: AuthenticatedUser
 }
 
@@ -19,23 +20,23 @@ type Args = {
  */
 export async function readTotpCookie({
 	payload,
+	req,
 	user,
 }: Args): Promise<TotpTokenPayload | undefined> {
 	if (!user) {
 		return undefined
 	}
 
-	const cookieStore = await cookies()
-	const totpCookie = cookieStore.get(`${payload.config.cookiePrefix}-totp`)
+	const totpCookie = parseCookies(req.headers).get(`${payload.config.cookiePrefix}-totp`)
 
-	if (!totpCookie?.value) {
+	if (!totpCookie) {
 		return undefined
 	}
 
 	let decoded: Partial<TotpTokenPayload>
 
 	try {
-		decoded = jwt.verify(totpCookie.value, payload.secret) as Partial<TotpTokenPayload>
+		decoded = jwt.verify(totpCookie, payload.secret) as Partial<TotpTokenPayload>
 	} catch {
 		return undefined
 	}
