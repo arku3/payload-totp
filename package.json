@@ -68,12 +68,12 @@
 	},
 	"devDependencies": {
 		"@eslint/eslintrc": "^3.2.0",
-		"@payloadcms/db-mongodb": "^4.0.0-beta.6",
-		"@payloadcms/db-postgres": "^4.0.0-beta.6",
-		"@payloadcms/db-sqlite": "^4.0.0-beta.6",
-		"@payloadcms/richtext-lexical": "^4.0.0-beta.6",
-		"@payloadcms/translations": "^4.0.0-beta.6",
-		"@payloadcms/ui": "^4.0.0-beta.6",
+		"@payloadcms/db-mongodb": "^4.0.0-beta.7",
+		"@payloadcms/db-postgres": "^4.0.0-beta.7",
+		"@payloadcms/db-sqlite": "^4.0.0-beta.7",
+		"@payloadcms/richtext-lexical": "^4.0.0-beta.7",
+		"@payloadcms/translations": "^4.0.0-beta.7",
+		"@payloadcms/ui": "^4.0.0-beta.7",
 		"@playwright/test": "1.63.0",
 		"@swc-node/register": "1.10.9",
 		"@swc/cli": "0.6.0",
@@ -96,7 +96,7 @@
 		"next": "^16.3.3",
 		"open": "^10.1.0",
 		"oxfmt": "^0.73.0",
-		"payload": "^4.0.0-beta.6",
+		"payload": "^4.0.0-beta.7",
 		"prettier": "^3.4.2",
 		"qs-esm": "8.0.1",
 		"react": "19.3.1",
@@ -107,9 +107,9 @@
 		"uuid": "^11.0.5"
 	},
 	"peerDependencies": {
-		"@payloadcms/translations": "^4.0.0-beta.6",
-		"@payloadcms/ui": "^4.0.0-beta.6",
-		"payload": "^4.0.0-beta.6"
+		"@payloadcms/translations": "^4.0.0-beta.7",
+		"@payloadcms/ui": "^4.0.0-beta.7",
+		"payload": "^4.0.0-beta.7"
 	},
 	"engines": {
 		"node": ">=24.22.1",
